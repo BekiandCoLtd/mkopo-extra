@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Check Your Loan Eligibility | Mkopo Extra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #2ecc71;
+      --dark-green: #27ae60;
+      --light-gray: #f8f9fa;
+      --white: #ffffff;
+      --black: #000000;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --input-border: #ddd;
+      --input-focus: #2ecc71;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light-gray);
+      color: var(--black);
+      line-height: 1.6;
+      padding: 1rem;
+    }
+
+    .form-container {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--box-shadow);
+      max-width: 500px;
+      margin: 1rem auto;
+      position: relative;
+    }
+
+    h1 {
+      color: var(--primary-green);
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .step {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--light-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black);
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    .step.active {
+      background-color: var(--primary-green);
+      color: var(--white);
+    }
+
+    .line {
+      flex: 1;
+      height: 2px;
+      background-color: var(--light-gray);
+      margin: 0 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .loan-range {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-green);
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 1.2rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 10px 5px;
+      border: 1px solid var(--input-border);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .input-field:focus {
+      border-color: var(--input-focus);
+      border-width: 2px;
+      padding-bottom: 5px;
+    }
+
+    .floating-label {
+      position: absolute;
+      top: 12px;
+      left: 10px;
+      color: #999;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      background-color: var(--white);
+      padding: 0 5px;
+    }
+
+    .input-field:focus + .floating-label,
+    .input-field:not(:placeholder-shown) + .floating-label {
+      top: -10px;
+      left: 5px;
+      font-size: 0.8rem;
+      color: var(--input-focus);
+    }
+
+    select.input-field {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 1em;
+      padding-right: 30px;
+    }
+
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .badge {
+      background-color: rgba(46, 204, 113, 0.1);
+      border: 1px solid var(--primary-green);
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--primary-green);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .cta {
+      width: 100%;
+      background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+      color: var(--white);
+      border: none;
+      border-radius: 25px;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+    }
+
+    .dialog {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .dialog-content {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      max-width: 300px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .dialog h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .dialog p {
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary-green);
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h1>Mkopo Extra</h1>
+
+  <div class="steps">
+    <div class="step active">1</div>
+    <div class="line"></div>
+    <div class="step">2</div>
+    <div class="line"></div>
+    <div class="step">3</div>
+  </div>
+
+  <h2>Check Your Loan Eligibility</h2>
+  <p class="loan-range">Ksh. 1,500 – 80,000</p>
+
+  <form id="eligibilityForm">
+    <div class="input-group">
+      <input type="text" id="name" class="input-field" placeholder=" " required>
+      <label class="floating-label" for="name">Full Name</label>
+    </div>
+
+    <div class="input-group">
+      <input type="tel" id="phone" class="input-field" placeholder=" " pattern="[0-9]{10}" required>
+      <label class="floating-label" for="phone">Phone Number</label>
+    </div>
+
+    <div class="input-group">
+      <input type="text" id="id" class="input-field" placeholder=" " pattern="[0-9]{8}" required>
+      <label class="floating-label" for="id">ID Number</label>
+    </div>
+
+    <div class="input-group">
+      <select id="loanType" class="input-field" required>
+        <option value="" selected disabled></option>
+        <option value="business">Business Loan</option>
+        <option value="personal">Personal Loan</option>
+        <option value="education">Education Loan</option>
+        <option value="medical">Medical Loan</option>
+        <option value="emergency">Emergency Loan</option>
+      </select>
+      <label class="floating-label" for="loanType">Select Loan Type</label>
+    </div>
+
+    <div class="badges">
+      <span class="badge">🔒 Secure Application</span>
+      <span class="badge">👤 No CRB Check</span>
+      <span class="badge">⚡ Instant Approval</span>
+    </div>
+
+    <button type="submit" class="cta">CHECK ELIGIBILITY →</button>
+  </form>
+</div>
+
+<div id="loadingDialog" class="dialog">
+  <div class="dialog-content">
+    <h3>Checking Eligibility</h3>
+    <p>We're verifying your details...</p>
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Validate phone number (10 digits)
+    const phone = document.getElementById('phone').value;
+    if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+      alert('Phone number must be 10 digits.');
+      return;
+    }
+
+    // Validate ID number (8 digits)
+    const id = document.getElementById('id').value;
+    if (id.length !== 8 || !/^\d+$/.test(id)) {
+      alert('ID number must be 8 digits.');
+      return;
+    }
+
+    // Store user details in localStorage
+    const userName = document.getElementById('name').value;
+    const userPhone = document.getElementById('phone').value;
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('userPhone', userPhone);
+
+    // Show loading dialog
+    document.getElementById('loadingDialog').style.display = 'flex';
+
+    // Simulate API call delay
+    setTimeout(function() {
+      document.getElementById('loadingDialog').style.display = 'none';
+      window.location.href = 'apply.html';
+    }, 3000);
+  });
+</script>
+
+</body>
+</html>

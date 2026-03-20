@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Confirm on Your Phone | Mkopo Extra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #2ecc71;
+      --dark-green: #27ae60;
+      --light-gray: #f8f9fa;
+      --white: #ffffff;
+      --black: #000000;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light-gray);
+      color: var(--black);
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .dialog {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .dialog h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--black);
+    }
+
+    .dialog p {
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary-green);
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 1rem auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .checkmark {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--primary-green);
+      border-radius: 50%;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      transform: rotate(45deg);
+      margin: 0 auto 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="dialog">
+    <h2>Sending Payment Request</h2>
+    <p>Connecting securely...</p>
+    <p id="statusMessage">Initiating STK push...</p>
+    <div class="spinner" id="spinner"></div>
+    <div class="checkmark" id="checkmark"></div>
+  </div>
+
+  <script>
+    // Extract URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const amount = urlParams.get('amount') || '0';
+    const fee = urlParams.get('fee') || '0';
+    const total = urlParams.get('total') || '0';
+    const phone = urlParams.get('phone') || '0711222333';
+
+    // Format phone number for HashBack API (e.g., 0711222333 -> 254711222333)
+    const formattedPhone = phone.startsWith('0') ? '254' + phone.substring(1) : phone;
+
+    // Display status
+    document.getElementById('statusMessage').textContent = `Initiating STK push to ${formattedPhone} for Ksh ${fee}...`;
+
+    // Call HashBack API to initiate STK push
+    initiateHashBackSTK(formattedPhone, fee);
+
+    function initiateHashBackSTK(phone, fee) {
+      fetch('https://api.hashback.co.ke/initiatestk', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          api_key: 'h26318lAeWYob',
+          account_id: 'HW3261804325',
+          amount: fee,
+          msisdn: phone,
+          reference: 'LOAN_' + Date.now()
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('HashBack STK Response:', data);
+        if (data.success) {
+          document.getElementById('spinner').style.display = 'none';
+          document.getElementById('checkmark').style.display = 'block';
+          document.getElementById('statusMessage').textContent = 'STK push initiated successfully! Check your phone.';
+          checkTransactionStatus(data.checkout_id);
+        } else {
+          throw new Error(data.message || 'Failed to initiate STK push');
+        }
+      })
+      .catch(error => {
+        console.error('Error calling HashBack API:', error);
+        document.getElementById('statusMessage').textContent = 'Failed to initiate STK push. Please try again.';
+      });
+    }
+
+    function checkTransactionStatus(checkoutId) {
+      setTimeout(() => {
+        fetch('https://api.hashback.co.ke/transactionstatus', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            api_key: 'h26318lAeWYob',
+            account_id: 'HW3261804325',
+            checkoutid: checkoutId
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Transaction Status:', data);
+          if (data.ResponseCode === '0') {
+            alert('Payment successful! Your loan has been processed.');
+            window.location.href = 'success.html';
+          } else {
+            document.getElementById('statusMessage').textContent = 'Payment pending. Please complete the transaction on your phone.';
+          }
+        })
+        .catch(error => {
+          console.error('Error checking transaction status:', error);
+          document.getElementById('statusMessage').textContent = 'Error checking transaction status. Please refresh the page.';
+        });
+      }, 5000); // Check status after 5 seconds
+    }
+  </script>
+</body>
+</html>

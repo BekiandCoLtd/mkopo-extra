@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Select Your Loan Amount | Mkopo Extra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #2ecc71;
+      --dark-green: #27ae60;
+      --light-gray: #f8f9fa;
+      --white: #ffffff;
+      --black: #000000;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light-gray);
+      color: var(--black);
+      line-height: 1.6;
+      padding: 1rem;
+    }
+
+    .container {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--box-shadow);
+      max-width: 500px;
+      margin: 1rem auto;
+      position: relative;
+    }
+
+    .header {
+      background-color: var(--primary-green);
+      color: var(--white);
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+      margin: -1rem -1.5rem 1rem -1.5rem;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .step {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--light-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black);
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    .step.completed {
+      background-color: var(--primary-green);
+      color: var(--white);
+    }
+
+    .step.active {
+      background-color: var(--primary-green);
+      color: var(--white);
+    }
+
+    .line {
+      flex: 1;
+      height: 2px;
+      background-color: var(--light-gray);
+      margin: 0 0.5rem;
+    }
+
+    .greeting {
+      background-color: rgba(46, 204, 113, 0.1);
+      border-left: 4px solid var(--primary-green);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    }
+
+    .recent-loan {
+      background-color: rgba(46, 204, 113, 0.1);
+      padding: 0.8rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .recent-loan-icon {
+      color: var(--primary-green);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--primary-green);
+    }
+
+    .loan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .loan-card {
+      background-color: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .loan-card.selected {
+      border: 2px solid var(--primary-green);
+      background-color: rgba(46, 204, 113, 0.1);
+    }
+
+    .loan-amount {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-green);
+      margin-bottom: 0.3rem;
+    }
+
+    .loan-fee {
+      font-size: 0.8rem;
+      color: var(--black);
+      opacity: 0.7;
+    }
+
+    .cta {
+      width: 100%;
+      background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+      color: var(--white);
+      border: none;
+      border-radius: 25px;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+      display: block;
+      margin: 1.5rem auto 0;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      color: var(--primary-green);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .dialog {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .dialog-content {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      max-width: 400px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .dialog h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .loan-details {
+      background-color: rgba(46, 204, 113, 0.1);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      margin: 1rem 0;
+      text-align: left;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .dialog-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .dialog-btn {
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .dialog-btn.proceed {
+      background-color: var(--primary-green);
+      color: var(--white);
+      border: none;
+    }
+
+    .dialog-btn.change {
+      background-color: var(--light-gray);
+      color: var(--black);
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div>Mkopo Extra</div>
+  </div>
+
+  <div class="steps">
+    <div class="step completed">1</div>
+    <div class="line"></div>
+    <div class="step active">2</div>
+    <div class="line"></div>
+    <div class="step">3</div>
+  </div>
+
+  <div class="greeting">
+    Hi <span id="userName">User</span>, you qualify for these loan options based on your M-Pesa records (2-month term at 10% interest).
+  </div>
+
+  <div class="recent-loan">
+    <div class="recent-loan-icon">📊</div>
+    <div>
+      <strong>Recent Loans</strong><br>
+      <span id="recentBorrower">0711***2345 loaned Ksh 15,000 - 10 mins ago</span>
+    </div>
+  </div>
+
+  <h2 class="section-title">Select Your Loan Amount</h2>
+
+  <div class="loan-grid" id="loanGrid">
+    <div class="loan-card" data-amount="5500" data-fee="100">
+      <div class="loan-amount">Ksh 5,500</div>
+      <div class="loan-fee">Fee: Ksh 100</div>
+    </div>
+    <div class="loan-card" data-amount="6800" data-fee="130">
+      <div class="loan-amount">Ksh 6,800</div>
+      <div class="loan-fee">Fee: Ksh 130</div>
+    </div>
+    <div class="loan-card" data-amount="7800" data-fee="170">
+      <div class="loan-amount">Ksh 7,800</div>
+      <div class="loan-fee">Fee: Ksh 170</div>
+    </div>
+    <div class="loan-card" data-amount="9800" data-fee="190">
+      <div class="loan-amount">Ksh 9,800</div>
+      <div class="loan-fee">Fee: Ksh 190</div>
+    </div>
+    <div class="loan-card" data-amount="11200" data-fee="230">
+      <div class="loan-amount">Ksh 11,200</div>
+      <div class="loan-fee">Fee: Ksh 230</div>
+    </div>
+    <div class="loan-card" data-amount="16800" data-fee="250">
+      <div class="loan-amount">Ksh 16,800</div>
+      <div class="loan-fee">Fee: Ksh 250</div>
+    </div>
+    <div class="loan-card" data-amount="21200" data-fee="270">
+      <div class="loan-amount">Ksh 21,200</div>
+      <div class="loan-fee">Fee: Ksh 270</div>
+    </div>
+    <div class="loan-card" data-amount="25600" data-fee="400">
+      <div class="loan-amount">Ksh 25,600</div>
+      <div class="loan-fee">Fee: Ksh 400</div>
+    </div>
+    <div class="loan-card" data-amount="30000" data-fee="470">
+      <div class="loan-amount">Ksh 30,000</div>
+      <div class="loan-fee">Fee: Ksh 470</div>
+    </div>
+    <div class="loan-card" data-amount="35400" data-fee="590">
+      <div class="loan-amount">Ksh 35,400</div>
+      <div class="loan-fee">Fee: Ksh 590</div>
+    </div>
+    <div class="loan-card" data-amount="39800" data-fee="730">
+      <div class="loan-amount">Ksh 39,800</div>
+      <div class="loan-fee">Fee: Ksh 730</div>
+    </div>
+    <div class="loan-card" data-amount="44200" data-fee="1010">
+      <div class="loan-amount">Ksh 44,200</div>
+      <div class="loan-fee">Fee: Ksh 1010</div>
+    </div>
+    <div class="loan-card" data-amount="48600" data-fee="1600">
+      <div class="loan-amount">Ksh 48,600</div>
+      <div class="loan-fee">Fee: Ksh 1600</div>
+    </div>
+    <div class="loan-card" data-amount="70000" data-fee="1950">
+      <div class="loan-amount">Ksh 70,000</div>
+      <div class="loan-fee">Fee: Ksh 1950</div>
+    </div>
+    <div class="loan-card" data-amount="80000" data-fee="2200">
+      <div class="loan-amount">Ksh 80,000</div>
+      <div class="loan-fee">Fee: Ksh 2200</div>
+    </div>
+  </div>
+
+  <button class="cta" id="getLoanBtn">GET LOAN NOW →</button>
+
+  <a href="index.html" class="back-link">← Back to Home</a>
+</div>
+
+<div id="confirmDialog" class="dialog">
+  <div class="dialog-content">
+    <h3>Confirm Loan Request</h3>
+
+    <div class="loan-details">
+      <div class="detail-row">
+        <span>Loan Amount</span>
+        <span id="confirmAmount">Ksh 0</span>
+      </div>
+      <div class="detail-row">
+        <span>Processing Fee</span>
+        <span id="confirmFee">Ksh 0</span>
+      </div>
+      <div class="detail-row">
+        <span>Total Repayment</span>
+        <span id="confirmTotal">Ksh 0</span>
+      </div>
+    </div>
+
+    <div class="phone-display">
+      <div>📱 <span id="confirmPhone">0711222333</span></div>
+    </div>
+
+    <div class="dialog-buttons">
+      <button class="dialog-btn proceed" id="proceedBtn">Proceed</button>
+      <button class="dialog-btn change" id="changeBtn">Change Amount</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get user details from localStorage
+  const userName = localStorage.getItem('userName') || 'User';
+  const userPhone = localStorage.getItem('userPhone') || '0711222333';
+
+  // Display user details
+  document.getElementById('userName').textContent = userName;
+  document.getElementById('confirmPhone').textContent = userPhone;
+
+  // Generate random recent borrowers
+  const firstNames = ["James", "Mary", "John", "Jane", "Peter", "Grace", "David", "Ann", "Michael", "Linda", "Kevin", "Joy", "Brian", "Carol", "Paul", "Faith", "Daniel", "Eve", "Stephen", "Hope"];
+  const loanAmounts = [5000, 7500, 10000, 12500, 15000, 18500, 20000, 22000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000];
+  const timeAgo = ["just now", "5 mins ago", "10 mins ago", "15 mins ago", "20 mins ago", "25 mins ago", "30 mins ago", "35 mins ago", "40 mins ago", "45 mins ago", "50 mins ago", "55 mins ago", "1 hour ago", "2 hours ago", "3 hours ago", "4 hours ago", "5 hours ago", "6 hours ago", "7 hours ago", "8 hours ago"];
+
+  function generateRandomBorrower() {
+    const randomIndex = Math.floor(Math.random() * 20);
+    const firstName = firstNames[randomIndex];
+    const loanAmount = loanAmounts[randomIndex];
+    const time = timeAgo[randomIndex];
+    const phonePrefix = Math.floor(Math.random() * 30) + 700; // 0700 to 0729
+    const phoneSuffix = Math.floor(10000 + Math.random() * 90000);
+    const phoneNumber = `0${phonePrefix}***${phoneSuffix.toString().slice(-3)}`;
+
+    return `${phoneNumber} loaned Ksh ${loanAmount.toLocaleString()} - ${time}`;
+  }
+
+  // Set random borrower on page load
+  document.getElementById('recentBorrower').textContent = generateRandomBorrower();
+
+  // Change borrower every 5 seconds
+  setInterval(() => {
+    document.getElementById('recentBorrower').textContent = generateRandomBorrower();
+  }, 5000);
+
+  // Loan card selection
+  const loanCards = document.querySelectorAll('.loan-card');
+  let selectedAmount = 0;
+  let selectedFee = 0;
+
+  loanCards.forEach(card => {
+    card.addEventListener('click', function() {
+      loanCards.forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedAmount = parseInt(this.getAttribute('data-amount'));
+      selectedFee = parseInt(this.getAttribute('data-fee'));
+    });
+  });
+
+  // Get Loan Now button
+  document.getElementById('getLoanBtn').addEventListener('click', function() {
+    if (selectedAmount === 0) {
+      alert('Please select a loan amount');
+      return;
+    }
+
+    // Show confirmation dialog
+    document.getElementById('confirmDialog').style.display = 'flex';
+
+    // Calculate total repayment
+    const totalRepayment = selectedAmount + selectedFee;
+
+    // Update confirmation dialog
+    document.getElementById('confirmAmount').textContent = `Ksh ${selectedAmount.toLocaleString()}`;
+    document.getElementById('confirmFee').textContent = `Ksh ${selectedFee.toLocaleString()}`;
+    document.getElementById('confirmTotal').textContent = `Ksh ${totalRepayment.toLocaleString()}`;
+  });
+
+  // Proceed button in dialog
+  document.getElementById('proceedBtn').addEventListener('click', function() {
+    const totalRepayment = selectedAmount + selectedFee;
+    window.location.href = `confirm.html?amount=${selectedAmount}&fee=${selectedFee}&total=${totalRepayment}&phone=${encodeURIComponent(userPhone)}`;
+  });
+
+  // Change Amount button in dialog
+  document.getElementById('changeBtn').addEventListener('click', function() {
+    document.getElementById('confirmDialog').style.display = 'none';
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mkopo Extra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #2ecc71;
+      --dark-green: #27ae60;
+      --light-gray: #f8f9fa;
+      --white: #ffffff;
+      --black: #000000;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light-gray);
+      color: var(--black);
+      line-height: 1.6;
+    }
+
+    .header {
+      background-color: var(--primary-green);
+      color: var(--white);
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      font-size: 1.5rem;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      padding: 2rem;
+      text-align: center;
+      border-radius: var(--border-radius);
+      margin: 1rem auto;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .cta {
+      display: inline-block;
+      background-color: var(--white);
+      color: var(--dark-green);
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: var(--box-shadow);
+      transition: transform 0.2s;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+    }
+
+    .loan-box {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin: 1rem auto;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+    }
+
+    .loan-box h2 {
+      color: var(--primary-green);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .loan-box p {
+      color: var(--black);
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .section {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin: 1rem auto;
+      box-shadow: var(--box-shadow);
+    }
+
+    .section h2 {
+      color: var(--black);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .section p {
+      color: var(--black);
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .feature {
+      background-color: var(--light-gray);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      margin: 0.5rem auto;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      max-width: 400px;
+    }
+
+    .feature-icon {
+      color: var(--primary-green);
+      font-size: 1.2rem;
+    }
+
+    .trust {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin: 1rem auto;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+    }
+
+    .trust h2 {
+      color: var(--black);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .trust p {
+      color: var(--black);
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 1rem;
+    }
+
+    .trust-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .trust-icon {
+      background-color: rgba(46, 204, 113, 0.1);
+      border: 1px solid var(--primary-green);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-green);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div>Mkopo Extra</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <h1>Instant M-Pesa Loans</h1>
+    <p>Get funds directly to your M-Pesa in minutes. Simple, fast, and secure when you need it most.</p>
+    <a href="eligibility.html" class="cta">Apply Now →</a>
+  </div>
+
+  <div class="loan-box">
+    <h2>Borrow Ksh. 1,000 – 80,000</h2>
+    <p>New customers qualify for up to Ksh. 10,000 instantly.</p>
+  </div>
+
+  <div class="section">
+    <h2>Why Choose Mkopo Extra?</h2>
+    <p>We make borrowing simple, fast, and secure</p>
+
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <span>5-Minute Approval</span>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📄</div>
+      <span>No Paperwork</span>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🛡</div>
+      <span>Bank-Level Security</span>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">👥</div>
+      <span>No Guarantors</span>
+    </div>
+  </div>
+
+  <div class="trust">
+    <h2>Trusted & Secure</h2>
+    <p>Your security and trust are our top priorities</p>
+
+    <div class="trust-icons">
+      <div class="trust-icon" title="SSL Secured">🔒</div>
+      <div class="trust-icon" title="CBK Licensed">🏛</div>
+      <div class="trust-icon" title="Verified Service">✅</div>
+    </div>
+
+    <p>SSL Secured • CBK Licensed • Verified Service</p>
+    <p>Trusted by over 60,000 Kenyans nationwide</p>
+  </div>
+</div>
+
+</body>
+</html>

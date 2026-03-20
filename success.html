@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loan Processed Successfully | Mkopo Extra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #2ecc71;
+      --dark-green: #27ae60;
+      --light-gray: #f8f9fa;
+      --white: #ffffff;
+      --black: #000000;
+      --border-radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light-gray);
+      color: var(--black);
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .success-message {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      max-width: 400px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .success-message h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-green);
+    }
+
+    .success-message p {
+      margin-bottom: 1.5rem;
+    }
+
+    .checkmark {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--primary-green);
+      border-radius: 50%;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      transform: rotate(45deg);
+      margin: 0 auto 1rem;
+    }
+
+    .cta {
+      background-color: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 25px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="success-message">
+    <div class="checkmark"></div>
+    <h2>Loan Processed Successfully!</h2>
+    <p>Your loan of <span id="loanAmount">Ksh 0</span> has been successfully processed.</p>
+    <p>The amount will be disbursed to your M-Pesa shortly.</p>
+    <a href="index.html" class="cta">Back to Home</a>
+  </div>
+
+  <script>
+    // Extract URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const total = urlParams.get('total') || '0';
+
+    // Display loan amount
+    document.getElementById('loanAmount').textContent = `Ksh ${total}`;
+  </script>
+</body>
+</html>
