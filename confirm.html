@@ -100,16 +100,41 @@
     const total = urlParams.get('total');
     const phone = urlParams.get('phone');
 
-    // Simulate API call to HashBack
-    setTimeout(function() {
-      document.getElementById('spinner').style.display = 'none';
-      document.getElementById('checkmark').style.display = 'block';
+    // Format phone number for HashBack API (e.g., 254712345678)
+    const formattedPhone = phone.startsWith('0') ? '254' + phone.slice(1) : phone;
 
-      // Redirect to STK prompt page after 2 seconds
-      setTimeout(function() {
-        window.location.href = `stk-prompt.html?amount=${amount}&fee=${fee}&total=${total}&phone=${phone}`;
-      }, 2000);
-    }, 3000);
+    // Call HashBack STK Push API
+    fetch('https://api.hashback.co.ke/initiatestk', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        api_key: 'h26318lAeWYob',  // Your API key (use environment variables in production!)
+        account_id: 'HP883378',  // Your account ID (use environment variables in production!)
+        amount: total,
+        msisdn: formattedPhone,
+        reference: `LOAN_${Date.now()}`  // Unique reference for each transaction
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('STK Push initiated:', data);
+      if (data.success) {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('checkmark').style.display = 'block';
+        // Redirect to a confirmation page or show success message
+        setTimeout(() => {
+          window.location.href = `stk-prompt.html?amount=${amount}&fee=${fee}&total=${total}&phone=${phone}`;
+        }, 2000);
+      } else {
+        alert('Failed to initiate payment. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    });
   </script>
 </body>
 </html>
